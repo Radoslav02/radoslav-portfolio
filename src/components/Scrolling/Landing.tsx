@@ -108,7 +108,7 @@ export default function Landing() {
 
     scroller.addEventListener("wheel", onWheel, { passive: false });
 
-    return () => scroller.removeEventListener("wheel", onWheel as any);
+    return () => scroller.removeEventListener("wheel", onWheel);
   }, [currentIndex, navigate]);
 
   useEffect(() => {

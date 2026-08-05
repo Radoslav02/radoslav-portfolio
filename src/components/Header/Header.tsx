@@ -1,169 +1,32 @@
-import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import SlotText from "../common/SlotText";
 import "./Header.css";
 
-const CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-interface SlotWordProps {
-  text: string;
-  className?: string;
-  onClick?: () => void;
-
-  startDelay?: number;
-  perCharStagger?: number;
-  baseDuration?: number;
-  randomDuration?: number;
-
-  onAllComplete?: () => void;
-  collapseAfter?: boolean;
-}
-
-const randomGlyph = () => CHARSET[Math.floor(Math.random() * CHARSET.length)];
-
-function rollLetter(
-  span: HTMLSpanElement,
-  finalChar: string,
-  duration: number,
-  delay: number
-) {
-  const proxy = { t: 0 };
-  return gsap.to(proxy, {
-    t: 1,
-    duration,
-    delay,
-    ease: "power1.out",
-    onUpdate: () => {
-      span.textContent = randomGlyph();
-    },
-    onComplete: () => {
-      span.textContent = finalChar;
-    },
-  });
-}
-
-function calcFinishTime(
-  letterCount: number,
-  {
-    startDelay,
-    perCharStagger,
-    baseDuration,
-    randomDuration,
-  }: Required<
-    Pick<
-      SlotWordProps,
-      "startDelay" | "perCharStagger" | "baseDuration" | "randomDuration"
-    >
-  >
-) {
+/* Declared at module level so its identity is stable — defining it inside
+   Header made React remount every link (and replay the intro roll) on each
+   re-render, which is why the nav vanished after every navigation. */
+function MenuLink({
+  label,
+  to,
+  delay = 0,
+  onNavigate,
+}: {
+  label: string;
+  to: string;
+  delay?: number;
+  onNavigate: (to: string) => void;
+}) {
   return (
-    startDelay +
-    letterCount * perCharStagger +
-    baseDuration +
-    randomDuration +
-    0.2
-  );
-}
-
-function scheduleCollapse(
-  el: HTMLElement,
-  text: string,
-  totalFinish: number,
-  collapseAfter: boolean,
-  onAllComplete?: () => void
-) {
-  return gsap.delayedCall(totalFinish, () => {
-    if (collapseAfter) {
-      el.replaceChildren();
-      el.textContent = text;
-    }
-    gsap.set(el, { pointerEvents: "auto" });
-    onAllComplete?.();
-  });
-}
-
-function SlotWord({
-  text,
-  className,
-  onClick,
-  startDelay = 0,
-  perCharStagger = 0.06,
-  baseDuration = 0.7,
-  randomDuration = 0.6,
-  onAllComplete,
-  collapseAfter = true,
-}: SlotWordProps) {
-  const containerRef = useRef<HTMLSpanElement | null>(null);
-  const letters = useMemo(() => text.split(""), [text]);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    gsap.set(el, { pointerEvents: "none" });
-
-    const ctx = gsap.context(() => {
-      const spans = Array.from(
-        el.querySelectorAll<HTMLSpanElement>("[data-letter]")
-      );
-
-      const tweens: gsap.core.Tween[] = [];
-      spans.forEach((span, idx) => {
-        const finalChar = span.dataset.letter ?? "";
-        if (finalChar === " ") {
-          span.textContent = " ";
-          return;
-        }
-
-        const duration = baseDuration + Math.random() * randomDuration;
-        const delay = startDelay + idx * perCharStagger + Math.random() * 0.08;
-
-        tweens.push(rollLetter(span, finalChar, duration, delay));
-      });
-
-      const totalFinish = calcFinishTime(letters.length, {
-        startDelay,
-        perCharStagger,
-        baseDuration,
-        randomDuration,
-      });
-
-      scheduleCollapse(el, text, totalFinish, collapseAfter, onAllComplete);
-    }, containerRef);
-    return () => ctx.revert();
-  }, [
-    letters,
-    text,
-    startDelay,
-    perCharStagger,
-    baseDuration,
-    randomDuration,
-    onAllComplete,
-    collapseAfter,
-  ]);
-
-  return (
-    <span
-      ref={containerRef}
-      className={className}
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if ((e.key === "Enter" || e.key === " ") && onClick) {
-          e.preventDefault();
-          onClick();
-        }
-      }}
-    >
-      {letters.map((ch, i) => (
-        <span key={i} data-letter={ch} className="slot-letter">
-          {ch === " " ? " " : ""}
-        </span>
-      ))}
-    </span>
+    <SlotText
+      text={label}
+      className="menu-item"
+      startDelay={delay}
+      onClick={() => onNavigate(to)}
+    />
   );
 }
 
@@ -177,6 +40,27 @@ export default function Header() {
 
   const closeMobile = useCallback(() => setOpen(false), []);
   const openMobile = useCallback(() => setOpen(true), []);
+
+  const handleNavigate = useCallback(
+    (to: string) => {
+      navigate(to);
+      setOpen(false);
+    },
+    [navigate]
+  );
+
+  const titleGlow = useCallback(() => {
+    gsap.fromTo(
+      ".header-title",
+      { textShadow: "0 0 0px rgba(0,255,138,0.0)" },
+      {
+        textShadow: "0 0 12px rgba(0,255,138,0.8)",
+        duration: 0.25,
+        yoyo: true,
+        repeat: 1,
+      }
+    );
+  }, []);
 
   useEffect(() => {
     if (!headerRef.current) return;
@@ -245,49 +129,26 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const MenuLink = (props: { label: string; to: string; delay?: number }) => (
-    <SlotWord
-      text={props.label}
-      className="menu-item"
-      startDelay={props.delay ?? 0}
-      onClick={() => {
-        navigate(props.to);
-        closeMobile();
-      }}
-    />
-  );
-
   return (
     <>
       <div ref={headerRef} className="header-container">
         <div className="header-left">
-          <SlotWord
+          <SlotText
             text="Radoslav"
             className="header-title slot-title"
             startDelay={0.2}
             perCharStagger={0.07}
             baseDuration={0.65}
             randomDuration={0.5}
-            onAllComplete={() => {
-              gsap.fromTo(
-                ".header-title",
-                { textShadow: "0 0 0px rgba(0,255,138,0.0)" },
-                {
-                  textShadow: "0 0 12px rgba(0,255,138,0.8)",
-                  duration: 0.25,
-                  yoyo: true,
-                  repeat: 1,
-                }
-              );
-            }}
+            onAllComplete={titleGlow}
           />
         </div>
         <div className="header-right desktop-only">
-          <MenuLink label="Home" to="/home" delay={3.0} />
-          <MenuLink label="About" to="/about" delay={3.1} />
-          <MenuLink label="Skills" to="/skills" delay={3.2} />
-          <MenuLink label="Work" to="/work" delay={3.3} />
-          <MenuLink label="Contact" to="/contact" delay={3.4} />
+          <MenuLink label="Home" to="/home" delay={3.0} onNavigate={handleNavigate} />
+          <MenuLink label="About" to="/about" delay={3.1} onNavigate={handleNavigate} />
+          <MenuLink label="Skills" to="/skills" delay={3.2} onNavigate={handleNavigate} />
+          <MenuLink label="Work" to="/work" delay={3.3} onNavigate={handleNavigate} />
+          <MenuLink label="Contact" to="/contact" delay={3.4} onNavigate={handleNavigate} />
         </div>
 
         <button
@@ -320,11 +181,11 @@ export default function Header() {
           onClick={(e) => e.stopPropagation()}
         >
           <nav className="mobile-nav">
-            <MenuLink label="Home" to="/home" />
-            <MenuLink label="About" to="/about" />
-            <MenuLink label="Skills" to="/skills" />
-            <MenuLink label="Work" to="/work" />
-            <MenuLink label="Contact" to="/contact" />
+            <MenuLink label="Home" to="/home" onNavigate={handleNavigate} />
+            <MenuLink label="About" to="/about" onNavigate={handleNavigate} />
+            <MenuLink label="Skills" to="/skills" onNavigate={handleNavigate} />
+            <MenuLink label="Work" to="/work" onNavigate={handleNavigate} />
+            <MenuLink label="Contact" to="/contact" onNavigate={handleNavigate} />
           </nav>
         </div>
       </div>

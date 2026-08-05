@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
+import SlotText from "../common/SlotText";
 import "./Home.css";
 import profileImage from "../../assets/unnamed.jpg";
 
@@ -123,33 +124,6 @@ export default function Home() {
     };
   }, [prefersReduced]);
 
-  const textRef = useRef<HTMLHeadingElement | null>(null);
-  useEffect(() => {
-    if (!showText || !textRef.current || prefersReduced) return;
-
-    const textElement = textRef.current;
-    const original = textElement.innerText;
-    const letters = original.split("");
-    let iteration = 0;
-
-    const interval = setInterval(() => {
-      textElement.innerText = letters
-        .map((letter, idx) => {
-          if (idx < iteration) return letter;
-          return String.fromCharCode(0x30a0 + Math.random() * 96);
-        })
-        .join("");
-
-      if (iteration >= letters.length) {
-        textElement.innerText = original;
-        clearInterval(interval);
-      }
-      iteration += 0.5;
-    }, 30);
-
-    return () => clearInterval(interval);
-  }, [showText, prefersReduced]);
-
   return (
     <div className="home-container">
       <canvas ref={canvasRef} className="matrix-canvas" />
@@ -160,7 +134,15 @@ export default function Home() {
         </div>
 
         <div className={`home-text ${showText ? "visible" : ""}`}>
-          <h1 ref={textRef}>Hi, I’m Radoslav</h1>
+          <h1>
+            <SlotText
+              text="Hi, I’m Radoslav"
+              startDelay={1.3}
+              perCharStagger={0.05}
+              baseDuration={0.6}
+              randomDuration={0.4}
+            />
+          </h1>
           <p>
             Software engineer | Angular | React | .NET Core | Java | I design
             and code things — and I love what I do.

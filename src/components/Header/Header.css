@@ -43,11 +43,6 @@
   display: inline-flex;
 }
 
-.menu-item .slot-letter {
-  display: inline-block;
-  min-width: 0.6ch;
-}
-
 .menu-item,
 .header-title {
   position: relative;

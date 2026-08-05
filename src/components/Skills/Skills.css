@@ -100,11 +100,6 @@
   }
 }
 
-.slot-letter {
-  display: inline-block;
-  min-width: 0.6ch;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .skill-label-big {
     animation: none !important;

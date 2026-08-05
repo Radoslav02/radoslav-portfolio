@@ -28,11 +28,6 @@
   cursor: default;
 }
 
-.slot-letter {
-  display: inline-block;
-  min-width: 0.6ch;
-}
-
 .about-text {
   margin: 0 auto;
   max-width: 65ch;

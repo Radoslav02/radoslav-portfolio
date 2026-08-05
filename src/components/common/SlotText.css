@@ -1,0 +1,24 @@
+/* A word is atomic so lines only wrap at spaces, exactly like plain text. */
+.slot-word {
+  display: inline-block;
+}
+
+/* Each letter cell is sized by its (hidden) final character, so the full
+   final layout is reserved before the roll even starts — nothing shifts. */
+.slot-letter {
+  position: relative;
+  display: inline-block;
+}
+
+.slot-ghost {
+  visibility: hidden;
+}
+
+/* The rolling glyph overlays the cell without affecting layout. */
+.slot-roll {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: pre;
+}

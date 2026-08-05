@@ -54,11 +54,6 @@
   box-shadow: 0 0 10px rgba(0, 255, 138, 0.25);
 }
 
-.slot-letter {
-  display: inline-block;
-  min-width: 0.6ch;
-}
-
 .cv-button {
   display: inline-block;
   padding: clamp(10px, 1.6vw, 12px) clamp(20px, 3vw, 28px);

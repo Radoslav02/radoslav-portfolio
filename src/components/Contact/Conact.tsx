@@ -1,124 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { gsap } from "gsap";
+import { useEffect, useRef, useState } from "react";
+import SlotText from "../common/SlotText";
 import "./Contact.css";
-
-const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-function SlotText({
-  text,
-  className,
-  startDelay = 0,
-  perCharStagger = 0.05,
-  baseDuration = 0.6,
-  randomDuration = 0.5,
-  collapseAfter = true,
-}: {
-  text: string;
-  className?: string;
-  startDelay?: number;
-  perCharStagger?: number;
-  baseDuration?: number;
-  randomDuration?: number;
-  collapseAfter?: boolean;
-}) {
-  const ref = useRef<HTMLSpanElement | null>(null);
-  const letters = useMemo(() => text.split(""), [text]);
-
-  const prefersReduced =
-    typeof window !== "undefined" &&
-    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    if (prefersReduced) {
-      el.textContent = letters.join("");
-      return;
-    }
-
-    gsap.set(el, { pointerEvents: "none" });
-
-    const ctx = gsap.context(() => {
-      const spans = Array.from(
-        el.querySelectorAll<HTMLSpanElement>("[data-letter]")
-      );
-      const tweens: gsap.core.Tween[] = [];
-
-      spans.forEach((span, i) => {
-        const finalChar = span.dataset.letter ?? "";
-        if (finalChar === " ") {
-          span.textContent = " ";
-          return;
-        }
-
-        const duration = baseDuration + Math.random() * randomDuration;
-        const delay = startDelay + i * perCharStagger + Math.random() * 0.08;
-        const proxy = { t: 0 };
-
-        tweens.push(
-          gsap.to(proxy, {
-            t: 1,
-            duration,
-            delay,
-            ease: "power1.out",
-            onUpdate: () => {
-              span.textContent =
-                CHARSET[Math.floor(Math.random() * CHARSET.length)];
-            },
-            onComplete: () => {
-              span.textContent = finalChar;
-            },
-          })
-        );
-      });
-
-      const totalFinish =
-        startDelay +
-        letters.length * perCharStagger +
-        baseDuration +
-        randomDuration +
-        0.2;
-
-      const fin = gsap.delayedCall(totalFinish, () => {
-        if (collapseAfter) {
-          el.replaceChildren();
-          el.textContent = letters.join("");
-        }
-        gsap.set(el, { pointerEvents: "auto" });
-      });
-
-      return () => {
-        tweens.forEach((t) => t.kill());
-        fin.kill();
-      };
-    }, ref);
-
-    return () => ctx.revert();
-  }, [
-    letters,
-    startDelay,
-    perCharStagger,
-    baseDuration,
-    randomDuration,
-    collapseAfter,
-    prefersReduced,
-  ]);
-
-  return (
-    <span ref={ref} className={className} aria-label={letters.join("")}>
-      {letters.map((ch, i) => (
-        <span key={i} data-letter={ch} className="slot-letter">
-          {ch === " " ? " " : ""}
-        </span>
-      ))}
-    </span>
-  );
-}
 
 export default function Contact() {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [runId, setRunId] = useState(0);
+  const hasTriggeredRef = useRef(false);
 
   useEffect(() => {
     const el = rootRef.current;
@@ -126,8 +13,14 @@ export default function Contact() {
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+        if (
+          entry.isIntersecting &&
+          entry.intersectionRatio > 0.5 &&
+          !hasTriggeredRef.current
+        ) {
+          hasTriggeredRef.current = true;
           setRunId((n) => n + 1);
+          io.unobserve(el);
         }
       },
       { threshold: [0, 0.5, 1] }
