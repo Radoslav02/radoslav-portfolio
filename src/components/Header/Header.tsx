@@ -146,9 +146,10 @@ export default function Header() {
         <div className="header-right desktop-only">
           <MenuLink label="Home" to="/home" delay={3.0} onNavigate={handleNavigate} />
           <MenuLink label="About" to="/about" delay={3.1} onNavigate={handleNavigate} />
-          <MenuLink label="Skills" to="/skills" delay={3.2} onNavigate={handleNavigate} />
-          <MenuLink label="Work" to="/work" delay={3.3} onNavigate={handleNavigate} />
-          <MenuLink label="Contact" to="/contact" delay={3.4} onNavigate={handleNavigate} />
+          <MenuLink label="Experience" to="/experience" delay={3.2} onNavigate={handleNavigate} />
+          <MenuLink label="Skills" to="/skills" delay={3.3} onNavigate={handleNavigate} />
+          <MenuLink label="Work" to="/work" delay={3.4} onNavigate={handleNavigate} />
+          <MenuLink label="Contact" to="/contact" delay={3.5} onNavigate={handleNavigate} />
         </div>
 
         <button
@@ -183,6 +184,7 @@ export default function Header() {
           <nav className="mobile-nav">
             <MenuLink label="Home" to="/home" onNavigate={handleNavigate} />
             <MenuLink label="About" to="/about" onNavigate={handleNavigate} />
+            <MenuLink label="Experience" to="/experience" onNavigate={handleNavigate} />
             <MenuLink label="Skills" to="/skills" onNavigate={handleNavigate} />
             <MenuLink label="Work" to="/work" onNavigate={handleNavigate} />
             <MenuLink label="Contact" to="/contact" onNavigate={handleNavigate} />

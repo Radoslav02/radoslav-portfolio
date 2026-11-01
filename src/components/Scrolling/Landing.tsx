@@ -6,6 +6,7 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 import Home from "../Home/Home";
 import About from "../About/About";
+import Experience from "../Experience/Experience";
 import Skills from "../Skills/Skills";
 import Work from "../Work/Work";
 import Contact from "../Contact/Conact";
@@ -13,7 +14,7 @@ import "./Landing.css";
 
 gsap.registerPlugin(ScrollToPlugin);
 
-const SECTIONS = ["home", "about", "skills", "work", "contact"] as const;
+const SECTIONS = ["home", "about", "experience", "skills", "work", "contact"] as const;
 type SectionKey = (typeof SECTIONS)[number];
 
 export default function Landing() {
@@ -21,6 +22,7 @@ export default function Landing() {
   const sectionEls = useRef<Record<SectionKey, HTMLElement | null>>({
     home: null,
     about: null,
+    experience: null,
     skills: null,
     work: null,
     contact: null,
@@ -90,6 +92,19 @@ export default function Landing() {
 
     const COOLDOWN = 700;
     const onWheel = (e: WheelEvent) => {
+      const section = sectionEls.current[SECTIONS[currentIndex]];
+      if (section) {
+        const overflow = section.offsetHeight - scroller.clientHeight;
+        const offset = scroller.scrollTop - section.offsetTop;
+        if (
+          overflow > 1 &&
+          ((e.deltaY > 0 && offset < overflow - 1) ||
+            (e.deltaY < 0 && offset > 1))
+        ) {
+          return;
+        }
+      }
+
       e.preventDefault();
 
       const now = performance.now();
@@ -142,6 +157,16 @@ export default function Landing() {
       >
         <div className="center-wrap">
           <About />
+        </div>
+      </section>
+
+      <section
+        ref={setRef("experience")}
+        data-section="experience"
+        className="snap-section"
+      >
+        <div className="center-wrap">
+          <Experience />
         </div>
       </section>
 

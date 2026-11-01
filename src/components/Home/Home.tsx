@@ -144,8 +144,8 @@ export default function Home() {
             />
           </h1>
           <p>
-            Software engineer | Angular | React | .NET Core | Java | I design
-            and code things — and I love what I do.
+            Software engineer | React | React Native | TypeScript | I build web
+            and mobile products, from polished sites to fintech platforms.
           </p>
 
           {showIcons && (

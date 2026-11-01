@@ -10,6 +10,7 @@ export const router = createHashRouter([
       { index: true, element: <Landing /> },
       { path: "home", element: <Landing /> },
       { path: "about", element: <Landing /> },
+      { path: "experience", element: <Landing /> },
       { path: "skills", element: <Landing /> },
       { path: "work", element: <Landing /> },
       { path: "contact", element: <Landing /> },

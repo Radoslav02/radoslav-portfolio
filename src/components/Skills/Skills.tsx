@@ -2,15 +2,36 @@ import { useEffect, useRef, useState } from "react";
 import SlotText from "../common/SlotText";
 import "./Skills.css";
 
-type Skill = {
+type SkillGroup = {
   name: string;
+  skills: string[];
 };
 
-const SKILLS: Skill[] = [
-  { name: "Java" },
-  { name: "JavaScript" },
-  { name: "CSS" },
-  { name: "HTML" },
+const SKILL_GROUPS: SkillGroup[] = [
+  {
+    name: "Frontend",
+    skills: ["React", "TypeScript", "JavaScript", "HTML", "CSS / SCSS", "Tailwind", "MUI"],
+  },
+  {
+    name: "Mobile",
+    skills: ["React Native", "Expo", "EAS", "Push notifications", "Deep linking"],
+  },
+  {
+    name: "State & data",
+    skills: ["Zustand", "Redux", "TanStack Query", "React Hook Form", "Zod", "SSE"],
+  },
+  {
+    name: "Motion & 3D",
+    skills: ["GSAP", "Motion", "Three.js", "React Three Fiber", "Lenis"],
+  },
+  {
+    name: "Backend & cloud",
+    skills: ["Java", "Spring Boot", "C# / .NET", "Firebase", "MySQL", "Docker", "Vercel"],
+  },
+  {
+    name: "Tooling",
+    skills: ["Nx", "Vite", "Storybook", "Jest", "i18next", "Git"],
+  },
 ];
 
 export default function Skills() {
@@ -66,7 +87,7 @@ export default function Skills() {
             <p>
               <SlotText
                 key={`intro-${runId}`}
-                text="I started my journey with a two-week internship where I learned the fundamentals of React and gained an understanding of core frontend concepts. After the internship, I continued learning on my own, working on several mini projects to improve my practical skills and deepen my knowledge. Currently, I’m working at Payspot as a Junior Frontend Developer, where I focus on building applications using React, React Native and C#. I’m constantly improving my skills and expanding my expertise in modern frontend development."
+                text="I started with a React internship at ComData, kept building my own projects, then joined PaySpot as a frontend developer working with React, React Native and C#. Today I build web and mobile apps at Ferili, shipping everything from design systems and payment flows to AI-assisted KYC. Outside of work I build animated sites, online shops and custom tools for clients."
                 startDelay={0.2}
                 perCharStagger={0.015}
                 baseDuration={0.45}
@@ -76,20 +97,18 @@ export default function Skills() {
           </div>
 
           <div className="skills-list">
-            {SKILLS.map((s, i) => (
+            {SKILL_GROUPS.map((g, i) => (
               <div
-                className="skill-label-big"
-                key={s.name}
-                style={{ transitionDelay: `${80 * i}ms` }}
+                className="skill-group"
+                key={g.name}
+                style={{ animationDelay: `${80 * i}ms` }}
               >
-                <SlotText
-                  key={`skill-${runId}-${s.name}`}
-                  text={s.name}
-                  startDelay={0.15 + i * 0.05}
-                  perCharStagger={0.035}
-                  baseDuration={0.45}
-                  randomDuration={0.3}
-                />
+                <h3>{g.name}</h3>
+                <div className="skill-chips">
+                  {g.skills.map((s) => (
+                    <span key={s}>{s}</span>
+                  ))}
+                </div>
               </div>
             ))}
           </div>

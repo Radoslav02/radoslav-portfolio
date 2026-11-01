@@ -31,7 +31,7 @@ export default function About() {
   }, []);
 
   const paragraph =
-    "I am a 4th-year Computer Science student at the Faculty of Mathematics, University of Novi Sad, with a solid foundation in computer operations and software engineering principles. My academic journey has equipped me with practical experience, particularly in Java and JavaScript (React). I thrive in team-oriented environments and am committed to learning and adhering to industry standards. I am eager to further develop my skills through industry placements and internships.";
+    "I am a software engineer from Novi Sad, Serbia, building web and mobile products with React, React Native and TypeScript. At Ferili I work across a seven-app fintech platform used in four West African markets, and I also take on freelance work: animated marketing sites, online shops and custom tools. I studied Information Technology at the University of Novi Sad, and I care about clean code, reliable delivery and interfaces that feel good to use.";
 
   return (
     <section
