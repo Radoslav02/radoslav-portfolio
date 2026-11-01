@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./Work.css";
 import critic from "../../assets/images/critic.png";
 import plant from "../../assets/images/plant.png";
-import valkyra from "../../assets/images/valkyra.png";
+import valkyra from "../../assets/images/valkyra.webp";
 import yplanner from "../../assets/images/yplanner.png";
 import portfolio from "../../assets/images/portfolio.png";
 import jarvis from "../../assets/images/jarvis.png";
