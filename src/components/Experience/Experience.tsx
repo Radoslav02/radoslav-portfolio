@@ -39,8 +39,9 @@ const JOBS: Job[] = [
     role: "Frontend Developer",
     company: "PaySpot",
     period: "May 2025 – Apr 2026",
-    summary: "Built and maintained applications with React, React Native and C#.",
-    stack: ["React", "React Native", "C#"],
+    summary:
+      "Licensed Serbian payment institution. Worked on the consumer mobile wallet, the internal back-office web app and QR payments for self-service car washes.",
+    stack: ["React Native", "Expo", "React", "TypeScript", "Redux Toolkit"],
   },
   {
     role: "Front-end Intern",

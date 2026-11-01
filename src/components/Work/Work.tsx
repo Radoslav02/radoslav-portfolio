@@ -9,8 +9,7 @@ import jarvis from "../../assets/images/jarvis.png";
 import aura from "../../assets/images/aura.webp";
 import dapcevic from "../../assets/images/dapcevic.webp";
 import izradi from "../../assets/images/izradi.webp";
-import revive from "../../assets/images/revive.webp";
-import winery from "../../assets/images/winery.webp";
+import podovi from "../../assets/images/podovi.webp";
 
 type Project = {
   title: string;
@@ -39,6 +38,14 @@ const PROJECTS: Project[] = [
     img: dapcevic,
   },
   {
+    title: "Podovi Cvejić",
+    kind: "Client",
+    note: "Website for a flooring business offering laminate, parquet, SPC and vinyl floors.",
+    stack: "Next.js",
+    href: "https://podovicvejic.com",
+    img: podovi,
+  },
+  {
     title: "Izradi Sajt",
     kind: "Product",
     note: "Branching survey that turns answers into an instant, itemised website quote and a lead.",
@@ -63,33 +70,17 @@ const PROJECTS: Project[] = [
     img: plant,
   },
   {
-    title: "Vineyard Scroll",
-    kind: "Concept",
-    note: "Scroll-driven vineyard flythrough that hands off to an interactive WebGL cellar.",
-    stack: "Three.js · GSAP · Lenis",
-    href: "https://winery-demo-pink.vercel.app",
-    img: winery,
-  },
-  {
-    title: "Revive Interiors",
-    kind: "Concept",
-    note: "Bilingual marketing site for a fictional deep-cleaning service.",
-    stack: "React · Tailwind · Motion",
-    href: "https://cleaning-services-website-demo.vercel.app",
-    img: revive,
-  },
-  {
     title: "Critic Cafe",
     kind: "Personal",
     note: "Social network for movie lovers, with posts, ratings, messaging and admin tools.",
     stack: "React · Spring Boot · MySQL",
-    href: "https://my-im-db.vercel.app",
+    href: "https://github.com/Radoslav02/CriticCafe",
     img: critic,
   },
   {
     title: "YPlanner",
     kind: "Personal",
-    note: "Mobile-first daily task planner.",
+    note: "Appointment planner for salon professionals, with client records and financial reports.",
     stack: "React · TypeScript · Firestore",
     href: "https://yplanner.vercel.app",
     img: yplanner,

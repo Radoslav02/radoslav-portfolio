@@ -87,7 +87,7 @@ export default function Skills() {
             <p>
               <SlotText
                 key={`intro-${runId}`}
-                text="I started with a React internship at ComData, kept building my own projects, then joined PaySpot as a frontend developer working with React, React Native and C#. Today I build web and mobile apps at Ferili, shipping everything from design systems and payment flows to AI-assisted KYC. Outside of work I build animated sites, online shops and custom tools for clients."
+                text="I started with a React internship at ComData, kept building my own projects, then joined PaySpot as a frontend developer working on a React Native mobile wallet and a React back office. Today I build web and mobile apps at Ferili, shipping everything from design systems and payment flows to AI-assisted KYC. Outside of work I build animated sites, online shops and custom tools for clients."
                 startDelay={0.2}
                 perCharStagger={0.015}
                 baseDuration={0.45}
